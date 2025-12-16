@@ -1,15 +1,25 @@
-document.querySelector(".addbutton").addEventListener("click", async () => {
+const quoteText = document.querySelector(".APIquotes");
+const authorText = document.querySelector(".APIauthor");
+const btn = document.querySelector(".addbutton");
+
+btn.addEventListener("click", async () => {
   try {
+    btn.textContent = "Loading...";
+    btn.disabled = true;
+    quoteText.style.opacity = "0.5";
+
     const response = await fetch("https://quoteslate.vercel.app/api/quotes/random");
     const data = await response.json();
 
-    document.querySelector(".APIquotes").textContent = data.quote;
-    document.querySelector(".APIauthor").textContent = data.author;
-
-
-
+    quoteText.textContent = `"${data.quote}"`; 
+    authorText.textContent = `- ${data.author}`;
+    
   } catch (err) {
-    document.querySelector(".API.quotes").textContent = "⚠️ Failed to fetch quote";
+    quoteText.textContent = "⚠️ The wisdom is currently unavailable.";
     console.error(err);
+  } finally {
+    btn.textContent = "New Quote";
+    btn.disabled = false;
+    quoteText.style.opacity = "1";
   }
 });
